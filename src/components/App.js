@@ -2,7 +2,7 @@ import React from 'react'
 import {data} from '../data'
 import Navbar from './Navbar'
 import MovieCard from './MovieCard'
-
+import {addMovies} from '../actions'
 
 class App extends React.Component {
 
@@ -17,17 +17,14 @@ class App extends React.Component {
     
     // make api call
     // Dispatch action
-    store.dispatch({
-      type : 'ADD_MOVIES',
-      movies : data
-    });
+    store.dispatch(addMovies(data));
 
     console.log('AFTER STATE', store.getState());
 
   }
 
   render() {
-    const movies = this.props.store.getState();
+    const {list} = this.props.store.getState(); // {list : [], favourites []}
     console.log('RENDER');
 
     return (
@@ -39,7 +36,7 @@ class App extends React.Component {
             <div className="tab"> Favourties</div>
           </div>
           <div className="list">
-            {movies.map((movie, index) => (
+            {list.map((movie, index) => (
               <MovieCard movie={movie} key={movie.imdbID} />
             ))}
           </div>
