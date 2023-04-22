@@ -4,24 +4,50 @@ import Navbar from './Navbar'
 import MovieCard from './MovieCard'
 
 
-function App() {
-  return (
-    <div className="App">
-      <Navbar />
-      <div className="main">
-        <div className="tabs">
-          <div className="tab"> Movies</div>
-          <div className="tab"> Favourties</div>
-        </div>
-        <div className="list">
-          {data.map((movie, index) => (
-            <MovieCard movie={movie} key={movie.imdbID} />
-          ))}
+class App extends React.Component {
+
+  componentDidMount () {
+    const {store } = this.props;
+
+    store.subscribe(() => {
+      this.forceUpdate();
+
+      console.log('UPDATED');
+    });
+    
+    // make api call
+    // Dispatch action
+    store.dispatch({
+      type : 'ADD_MOVIES',
+      movies : data
+    });
+
+    console.log('AFTER STATE', store.getState());
+
+  }
+
+  render() {
+    const movies = this.props.store.getState();
+    console.log('RENDER');
+
+    return (
+      <div className="App">
+        <Navbar />
+        <div className="main">
+          <div className="tabs">
+            <div className="tab"> Movies</div>
+            <div className="tab"> Favourties</div>
+          </div>
+          <div className="list">
+            {movies.map((movie, index) => (
+              <MovieCard movie={movie} key={movie.imdbID} />
+            ))}
+          </div>
         </div>
       </div>
-      <h1> Movie App </h1>
-    </div>
-  );
+    );
+  
+  }
 }
 
 export default App;
